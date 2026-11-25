@@ -368,6 +368,8 @@ app.addEventListener('click', (event) => {
         <button type="button" class="lightbox-close icon-btn" data-action="zoom-close" aria-label="${esc(t(ui.zoomClose))}">${icon('close', 18)}</button>
         <img src="${shown.currentSrc || shown.src}" alt="${esc(shown.alt)}" />`;
       box.showModal();
+      // The page behind the viewer stays where it is until the viewer is closed.
+      document.documentElement.classList.add('is-locked');
       break;
     }
 
@@ -410,6 +412,11 @@ app.addEventListener(
   },
   true,
 );
+
+// However the viewer is closed (button, Escape, a click outside), the page scrolls again.
+document.getElementById('lightbox')!.addEventListener('close', () => {
+  document.documentElement.classList.remove('is-locked');
+});
 
 // A click on the dimmed area around the picture closes the viewer.
 document.getElementById('lightbox')!.addEventListener('click', (event) => {

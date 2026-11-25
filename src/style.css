@@ -173,6 +173,20 @@
     outline: none;
   }
 
+  /* While the screenshot viewer is open the page does not scroll. The gutter
+     stays reserved, so the layout does not jump when the scrollbar goes away. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  html.is-locked {
+    overflow: hidden;
+  }
+
+  .lightbox {
+    overscroll-behavior: contain;
+  }
+
   /* Page scrollbar in the site's own tones: a thin thumb on a clear track. */
   html {
     scrollbar-width: thin;
