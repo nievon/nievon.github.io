@@ -1187,6 +1187,30 @@
     }
   }
 
+  /* All cases share one container: a two-column grid on wide screens, where the
+     photo and wide cases span both columns and the compact pair sits side by side. */
+  .cases {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .cases {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cases > .case-photo-card,
+    .cases > .case-wide {
+      grid-column: 1 / -1;
+    }
+
+    /* Closed, the compact pair shares one height; opened, each keeps its own. */
+    .cases:has(.case-compact .case-more.is-open) {
+      align-items: start;
+    }
+  }
+
   /* Wide case without a photo. */
   .case-wide {
     padding: 24px;
@@ -2063,7 +2087,6 @@
   .case-foot .link,
   .case-foot .link-quiet,
   .disclosure,
-  .service-case .link,
   .stack-result .link,
   .stack-result .link-quiet {
     min-height: 44px;
@@ -2071,12 +2094,11 @@
     align-items: center;
   }
 
+  /* Example links stay inline text; extra line height gives each a comfortable tap area. */
   .service-case {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0 8px;
-    margin-top: 4px;
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 32px;
   }
 
   /* The zoom hint is always shown on touch screens, so keep it to the icon. */
@@ -2121,6 +2143,245 @@
 
   .lightbox-close {
     right: 8px;
+  }
+}
+
+/* --- Phone: rows that swipe -------------------------------------------------
+   A long page of stacked cards reads as one endless strip. On a phone, groups of
+   equal cards become rows that swipe sideways with snapping, the next card
+   peeking in from the right, and dots showing the position. */
+.swipe-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.swipe-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line-strong);
+  transition:
+    width 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.swipe-dots span.is-on {
+  width: 18px;
+  background: var(--accent-mark);
+}
+
+@media (max-width: 767px) {
+  .swipe {
+    /* Positioned, so hidden helper text inside off-screen cards is clipped with them
+       instead of widening the page. */
+    position: relative;
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    align-items: stretch;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Bleed to the screen edges, so cards slide in from the very edge. */
+    margin-inline: -20px;
+    padding: 4px 20px 12px;
+    scroll-padding-inline: 20px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .swipe::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swipe > * {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+  }
+
+  .swipe.cases {
+    align-items: flex-start;
+  }
+
+  .swipe.cases > * {
+    flex-basis: 88%;
+  }
+
+  /* Cards off to the side are not in view yet, so the scroll entrance is skipped here. */
+  .js .swipe [data-reveal],
+  .js .swipe [data-s],
+  .js .swipe .case-photo,
+  .js .swipe .case-photo img {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+
+  /* A swipe row is wider than the screen by design; the section clips it so the page itself never scrolls sideways. */
+  #app main > section {
+    overflow-x: clip;
+  }
+
+  /* Tighter rhythm between sections. */
+  #app main > section:not(.hero) > .mx-auto {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  .case-photo-card {
+    gap: 0;
+  }
+
+  .case-body {
+    padding: 16px 12px 8px;
+  }
+
+  .case-hook {
+    font-size: 21px;
+    line-height: 27px;
+  }
+
+  .case .story {
+    margin-top: 16px;
+  }
+
+  .fold-inner > .story {
+    margin-top: 8px;
+    padding-bottom: 4px;
+  }
+
+  /* Services: the two main ones swipe, the rest is an accordion. */
+  .services {
+    margin-top: 20px;
+  }
+
+  .service-row.is-acc {
+    display: block;
+    padding: 0;
+  }
+
+  .acc-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 60px;
+    padding: 12px 0;
+    color: var(--fg);
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 500;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .acc-toggle > .icon {
+    flex: none;
+    color: var(--muted);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .acc-toggle[aria-expanded='true'] > .icon {
+    transform: rotate(180deg);
+  }
+
+  .acc {
+    display: grid;
+    grid-template-rows: 0fr;
+    max-width: none;
+    opacity: 0;
+    transition:
+      grid-template-rows 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .acc.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .acc-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding-left: 44px;
+  }
+
+  .acc.is-open .acc-inner {
+    padding-bottom: 16px;
+  }
+
+  /* About: lead text, then the three principles as a swipe row. */
+  .about-lead {
+    margin-top: 16px;
+  }
+
+  /* Stack: group tabs in a row that scrolls, one group of chips at a time. */
+  .stack-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    margin-inline: -20px;
+    padding: 2px 20px;
+    scrollbar-width: none;
+  }
+
+  .stack-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stack-tab {
+    flex: none;
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--card);
+    color: var(--fg2);
+    font-size: 14px;
+    line-height: 20px;
+    white-space: nowrap;
+    transition:
+      background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+      color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+      scale 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .stack-tab:active {
+    scale: 0.96;
+  }
+
+  .stack-tab[aria-pressed='true'] {
+    border-color: var(--accent-mark);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .stack-panel {
+    min-height: 144px;
+    align-content: flex-start;
+  }
+
+  .stack-panel > li {
+    animation: rise 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .stack-result {
+    margin-top: 16px;
+  }
+
+  /* Process: a tighter rail. */
+  .tl-step {
+    gap: 16px;
+    padding: 8px 0;
+  }
+
+  .tl-body h3 {
+    font-size: 18px;
+    line-height: 26px;
   }
 }
 

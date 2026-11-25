@@ -1,6 +1,7 @@
 import { esc, rich, t, ui } from '../i18n';
 import { icon, type IconName } from '../icons';
 import type { L } from '../types';
+import { dots } from './projects';
 
 export function aboutSection(): string {
   const principles: [IconName, L, L][] = [
@@ -18,7 +19,8 @@ export function aboutSection(): string {
         <p class="about-text" data-reveal>${rich(t(ui.aboutApproach))}</p>
         <p class="about-text" data-reveal>${rich(t(ui.aboutStack))}</p>
       </div>
-      <ul class="about-list">
+      <div class="min-w-0">
+      <ul class="about-list swipe">
         ${principles
           .map(
             ([ic, title, text]) => `
@@ -32,6 +34,8 @@ export function aboutSection(): string {
           )
           .join('')}
       </ul>
+      ${dots(principles.length)}
+      </div>
     </div>
   </div>`;
 }

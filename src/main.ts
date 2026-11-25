@@ -9,7 +9,7 @@ import { hero } from './sections/hero';
 import { projectsSection } from './sections/projects';
 import { stackResult, stackSection } from './sections/stack';
 import { servicesSection } from './sections/services';
-import { state } from './state';
+import { phone, state } from './state';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -321,6 +321,33 @@ app.addEventListener('click', (event) => {
       break;
     }
 
+    case 'acc': {
+      // Accordion row on a phone, toggled in place so it can animate.
+      const open = (state.acc[value] = !state.acc[value]);
+      const panel = document.getElementById(`svc-${value}`)!;
+      el.setAttribute('aria-expanded', String(open));
+      panel.classList.toggle('is-open', open);
+      panel.toggleAttribute('inert', !open);
+      break;
+    }
+
+    case 'stack-group': {
+      // Keep the tab row where it was and bring the chosen tab fully into view.
+      const before = app.querySelector<HTMLElement>('.stack-tabs')?.scrollLeft ?? 0;
+      state.stackGroup = value;
+      render('stack');
+      const row = app.querySelector<HTMLElement>('.stack-tabs');
+      const tab = row?.querySelector<HTMLElement>('.stack-tab[aria-pressed="true"]');
+      if (row && tab) {
+        row.scrollLeft = before;
+        row.scrollTo({
+          left: tab.offsetLeft - (row.clientWidth - tab.offsetWidth) / 2,
+          behavior: reducedMotion.matches ? 'auto' : 'smooth',
+        });
+      }
+      break;
+    }
+
     case 'tech': {
       const previous = state.tech;
       state.tech = value && value !== previous ? value : null;
@@ -357,6 +384,27 @@ app.addEventListener('click', (event) => {
       break;
   }
 });
+
+// Blocks that change shape between phone and wider screens are rebuilt when the breakpoint is crossed.
+phone.addEventListener('change', () => render('services', 'stack'));
+
+// Rows that swipe sideways on a phone: keep the position dots under them in step.
+// Scroll events do not bubble, so they are caught on the way down.
+app.addEventListener(
+  'scroll',
+  (event) => {
+    const row = event.target as HTMLElement;
+    if (!(row instanceof HTMLElement) || !row.classList.contains('swipe')) return;
+    const marks = row.parentElement?.querySelector(':scope > .swipe-dots');
+    const first = row.firstElementChild as HTMLElement | null;
+    if (!marks || !first) return;
+    const step = first.offsetWidth + 12;
+    const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4;
+    const index = atEnd ? marks.children.length - 1 : Math.round(row.scrollLeft / step);
+    [...marks.children].forEach((dot, i) => dot.classList.toggle('is-on', i === index));
+  },
+  true,
+);
 
 // A click on the dimmed area around the picture closes the viewer.
 document.getElementById('lightbox')!.addEventListener('click', (event) => {

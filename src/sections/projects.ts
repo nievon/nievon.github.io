@@ -59,9 +59,9 @@ function more(p: Project, content: string): string {
     </div>`;
 }
 
-function part(title: string, text: string, outcome = false, step = 2): string {
+function part(title: string, text: string, outcome = false, step = 2, extra = ''): string {
   return `
-    <div class="story-part${outcome ? ' is-outcome' : ''}" data-s style="--i:${step}">
+    <div class="story-part${outcome ? ' is-outcome' : ''}${extra}" data-s style="--i:${step}">
       <h4>${outcome ? icon('check') : ''}${esc(title)}</h4>
       <p>${rich(text)}</p>
     </div>`;
@@ -101,6 +101,29 @@ function title(p: Project, withKind = true): string {
     </div>`;
 }
 
+/**
+ * The full story of a case. On wide screens it is simply shown. On a phone the
+ * cases sit in a swipeable row, so each card leads with its result and keeps the
+ * problem and the work behind a "show the case" toggle.
+ */
+function story(p: Project, columns: boolean): string {
+  const open = !!state.unfolded[p.id];
+  return `
+    <div class="story md:hidden">
+      ${part(t(ui.storyOutcome), t(p.story.outcome), true, 2)}
+    </div>
+    <button type="button" class="fold-toggle md:hidden print:hidden" data-action="fold" data-project="${p.id}" data-key="fold:${p.id}" aria-expanded="${open}" aria-controls="fold-${p.id}">
+      <span class="when-closed">${esc(t(ui.foldOpen))}</span><span class="when-open">${esc(t(ui.foldClose))}</span>${icon('chevronDown')}
+    </button>
+    <div id="fold-${p.id}" class="fold${open ? ' is-open' : ''}"><div class="fold-inner">
+      <div class="story${columns ? ' story-columns' : ''}">
+        ${part(t(ui.storyProblem), t(p.story.problem), false, 2)}
+        ${part(t(ui.storySolution), t(p.story.solution), false, 3)}
+        ${part(t(ui.storyOutcome), t(p.story.outcome), true, 4, ' max-md:hidden')}
+      </div>
+    </div></div>`;
+}
+
 /** A case with a photo: the image takes one side, the story the other. */
 function photoCase(p: Project, index: number): string {
   return `
@@ -112,11 +135,7 @@ function photoCase(p: Project, index: number): string {
         ${meta(p)}
       </div>
       <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
-      <div class="story">
-        ${part(t(ui.storyProblem), t(p.story.problem), false, 2)}
-        ${part(t(ui.storySolution), t(p.story.solution), false, 3)}
-        ${part(t(ui.storyOutcome), t(p.story.outcome), true, 4)}
-      </div>
+      ${story(p, false)}
       <div class="case-foot" data-s style="--i:5">
         ${links(p)}
         ${disclosure(p, t(ui.viewTech))}
@@ -124,20 +143,6 @@ function photoCase(p: Project, index: number): string {
       ${more(p, tech(p))}
     </div>
   </article>`;
-}
-
-/**
- * On a phone the cases without a photo start folded to their title and headline,
- * so the list stays short. The fold only exists below the tablet breakpoint;
- * on wider screens the content is always shown and the toggle is hidden.
- */
-function fold(p: Project, content: string): string {
-  const open = !!state.unfolded[p.id];
-  return `
-    <button type="button" class="fold-toggle md:hidden print:hidden" data-action="fold" data-project="${p.id}" data-key="fold:${p.id}" aria-expanded="${open}" aria-controls="fold-${p.id}">
-      <span class="when-closed">${esc(t(ui.foldOpen))}</span><span class="when-open">${esc(t(ui.foldClose))}</span>${icon('chevronDown')}
-    </button>
-    <div id="fold-${p.id}" class="fold${open ? ' is-open' : ''}"><div class="fold-inner">${content}</div></div>`;
 }
 
 /** A wide case without a photo: the story runs in three columns. */
@@ -149,19 +154,12 @@ function wideCase(p: Project): string {
       ${meta(p)}
     </div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
-    ${fold(
-      p,
-      `<div class="story story-columns">
-      ${part(t(ui.storyProblem), t(p.story.problem), false, 2)}
-      ${part(t(ui.storySolution), t(p.story.solution), false, 3)}
-      ${part(t(ui.storyOutcome), t(p.story.outcome), true, 4)}
-    </div>
+    ${story(p, true)}
     <div class="case-foot" data-s style="--i:5">
       ${links(p)}
       ${disclosure(p, t(ui.viewTech))}
     </div>
-    ${more(p, tech(p))}`,
-    )}
+    ${more(p, tech(p))}
   </article>`;
 }
 
@@ -171,9 +169,7 @@ function compactCase(p: Project, index: number): string {
   <article id="project-${p.id}" class="case case-compact" ${hl(p)} data-reveal="${index % 2 ? 'right' : 'left'}">
     <div data-s style="--i:0">${title(p, false)}</div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
-    ${fold(
-      p,
-      `<div class="story">
+    <div class="story">
       ${part(t(ui.storyOutcome), t(p.story.outcome), true)}
     </div>
     ${more(
@@ -188,9 +184,13 @@ function compactCase(p: Project, index: number): string {
       ${links(p)}
       ${disclosure(p, t(ui.more))}
     </div>
-    ${p.confidential || p.status ? `<p class="case-note">${meta(p)}</p>` : ''}`,
-    )}
+    ${p.confidential || p.status ? `<p class="case-note">${meta(p)}</p>` : ''}
   </article>`;
+}
+
+/** Position dots for a row that swipes sideways on a phone. */
+export function dots(count: number): string {
+  return `<div class="swipe-dots md:hidden print:hidden" aria-hidden="true">${Array.from({ length: count }, (_, i) => `<span${i === 0 ? ' class="is-on"' : ''}></span>`).join('')}</div>`;
 }
 
 export function projectsSection(): string {
@@ -202,14 +202,11 @@ export function projectsSection(): string {
   <div class="mx-auto max-w-[1120px] px-5 py-14 md:py-20">
     <h2 class="section-title">${esc(t(ui.projectsTitle))}</h2>
     <p class="section-lead print:hidden">${esc(t(ui.projectsLead))}</p>
-    <div class="mt-8 grid grid-cols-[minmax(0,1fr)] gap-6">
+    <div class="cases swipe mt-8">
       ${withPhoto.map(photoCase).join('')}
       ${wide.map(wideCase).join('')}
+      ${compact.map(compactCase).join('')}
     </div>
-    ${
-      compact.length
-        ? `<div class="case-row mt-6">${compact.map(compactCase).join('')}</div>`
-        : ''
-    }
+    ${dots(projects.length)}
   </div>`;
 }
