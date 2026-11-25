@@ -73,9 +73,9 @@
   The palette stays in the blue family. Sections differ by shade and by the tone
   of their background band, not by hue:
     projects, process, contacts   the base blue
-    services                      sky blue, on a white band
     about                         navy, on a blue-tinted band
-    stack                         the base blue, selected items filled
+    services                      sky blue, on a white band
+    stack                         the base blue on a white band, selected items filled
   Contrast of accent text, light theme (on tint / page or band / card):
     sky 5.1 / 5.5 / 5.9   navy 8.8 / 9.2 / 10.4
   Dark theme:
@@ -601,10 +601,10 @@
   }
 
   /* Sections alternate background tones, so neighbours do not merge:
-     page, white band, blue-tinted band, white band, page. The bands are
+     page, blue-tinted band, white band, page, white band, page. The bands are
      slightly see-through, so the backdrop marks still show faintly. */
   #services,
-  #process {
+  #stack {
     background: color-mix(in srgb, var(--band-light) 70%, transparent);
   }
 
@@ -2208,8 +2208,86 @@
     scroll-snap-align: start;
   }
 
+  /* Case cards share one height while closed, with their controls on one line at
+     the bottom. Once any card is opened, each keeps its own height. */
   .swipe.cases {
+    align-items: stretch;
+  }
+
+  .swipe.cases:has(.fold.is-open),
+  .swipe.cases:has(.case-more.is-open) {
     align-items: flex-start;
+  }
+
+  .swipe.cases > .case {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .case-photo-card > .case-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .case-body > .fold-toggle,
+  .case-wide > .fold-toggle {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+
+  .swipe.cases .fold {
+    flex: none;
+  }
+
+  /* The result block takes up whatever height is left, so a shorter card has no
+     empty hole. While a card is closed its result is cut to five lines; opening
+     the card shows it in full. */
+  .swipe.cases .lead-outcome {
+    display: flex;
+    flex: 1;
+  }
+
+  .swipe.cases .lead-outcome > .story-part {
+    flex: 1;
+  }
+
+  /* In a card with an icon panel the panel takes the spare height instead,
+     so the result block stays the size of its text. */
+  .swipe.cases .case:has(> .case-banner) .lead-outcome {
+    flex: none;
+  }
+
+  .swipe.cases .lead-outcome p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    overflow: hidden;
+  }
+
+  .swipe.cases .case:has(.fold.is-open) .lead-outcome p,
+  .swipe.cases .case:has(.case-more.is-open) .lead-outcome p {
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  /* Icon panel standing in for a screenshot: same shape and place as the photo slot. */
+  .case-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+    min-height: calc((88vw - 16px) * 0.5);
+    margin: -12px -12px 16px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--accent-mark);
+  }
+
+  .swipe.cases .case-photo {
+    flex: none;
   }
 
   .swipe.cases > * {

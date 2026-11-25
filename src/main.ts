@@ -19,8 +19,8 @@ app.innerHTML = `
   <main id="main" tabindex="-1">
     <section id="top" class="hero"></section>
     <section id="projects" class="section"></section>
-    <section id="services" class="section"></section>
     <section id="about" class="section"></section>
+    <section id="services" class="section"></section>
     <section id="process" class="section"></section>
     <section id="stack" class="section"></section>
     <section id="contacts" class="section"></section>
@@ -130,13 +130,13 @@ function syncNav(): void {
 
   const marker = window.innerHeight * 0.35;
   let active = '';
-  for (const id of ['projects', 'services', 'about', 'process', 'stack', 'contacts']) {
+  for (const id of ['projects', 'about', 'services', 'process', 'stack', 'contacts']) {
     if (document.getElementById(id)!.getBoundingClientRect().top <= marker) active = id;
   }
   // The last section is short, so the end of the page counts as reaching it.
   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) active = 'contacts';
-  // The process section has no link of its own; it continues the About section.
-  if (active === 'process') active = 'about';
+  // The process section has no link of its own; it continues the services.
+  if (active === 'process') active = 'services';
 
   app.querySelectorAll<HTMLAnchorElement>('.nav-link, .tab-link').forEach((link) => {
     if (link.getAttribute('href') === `#${active}`) link.setAttribute('aria-current', 'true');

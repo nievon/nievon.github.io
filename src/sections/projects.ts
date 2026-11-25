@@ -109,7 +109,7 @@ function title(p: Project, withKind = true): string {
 function story(p: Project, columns: boolean): string {
   const open = !!state.unfolded[p.id];
   return `
-    <div class="story md:hidden">
+    <div class="story lead-outcome md:hidden">
       ${part(t(ui.storyOutcome), t(p.story.outcome), true, 2)}
     </div>
     <button type="button" class="fold-toggle md:hidden print:hidden" data-action="fold" data-project="${p.id}" data-key="fold:${p.id}" aria-expanded="${open}" aria-controls="fold-${p.id}">
@@ -145,10 +145,16 @@ function photoCase(p: Project, index: number): string {
   </article>`;
 }
 
+/** On a phone a case without a screenshot gets an icon panel of the same size, so every card in the row starts alike. */
+function banner(p: Project): string {
+  return `<div class="case-banner md:hidden print:hidden" aria-hidden="true">${icon(p.icon, 48, 1.25)}</div>`;
+}
+
 /** A wide case without a photo: the story runs in three columns. */
 function wideCase(p: Project): string {
   return `
   <article id="project-${p.id}" class="case case-wide" ${hl(p)} data-reveal="case">
+    ${banner(p)}
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
       ${title(p)}
       ${meta(p)}
@@ -167,9 +173,10 @@ function wideCase(p: Project): string {
 function compactCase(p: Project, index: number): string {
   return `
   <article id="project-${p.id}" class="case case-compact" ${hl(p)} data-reveal="${index % 2 ? 'right' : 'left'}">
+    ${banner(p)}
     <div data-s style="--i:0">${title(p, false)}</div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
-    <div class="story">
+    <div class="story lead-outcome">
       ${part(t(ui.storyOutcome), t(p.story.outcome), true)}
     </div>
     ${more(

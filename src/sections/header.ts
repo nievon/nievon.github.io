@@ -7,8 +7,8 @@ import { segmented } from '../ui';
 
 const links: { href: string; label: L; short: L; icon: IconName }[] = [
   { href: '#projects', label: ui.navProjects, short: ui.navProjects, icon: 'briefcase' },
-  { href: '#services', label: ui.navServices, short: ui.navServices, icon: 'layoutDashboard' },
   { href: '#about', label: ui.navAbout, short: ui.navAbout, icon: 'user' },
+  { href: '#services', label: ui.navServices, short: ui.navServices, icon: 'layoutDashboard' },
   { href: '#stack', label: ui.navStack, short: ui.navStack, icon: 'codeXml' },
   { href: '#contacts', label: ui.navContacts, short: ui.navContacts, icon: 'send' },
 ];
