@@ -70,29 +70,38 @@
 }
 
 /*
-  Each section has its own accent, so the page reads as distinct chapters:
-  projects and contacts blue, services teal, about amber, process rose, stack slate.
-  Contrast of accent text, light theme (on tint / page / card):
-    teal 4.8 / 5.1 / 5.5   amber 5.5 / 5.8 / 6.3   rose 5.4 / 5.9 / 6.3   slate 8.8 / 9.7 / 10.4
-  Dark theme (on tint / page / card):
-    teal 7.6 / 10.1 / 9.4   amber 8.1 / 10.3 / 9.7   rose 6.5 / 7.7 / 7.2   slate 8.5 / 10.2 / 9.6
+  The palette stays in the blue family. Sections differ by shade and by the tone
+  of their background band, not by hue:
+    projects, process, contacts   the base blue
+    services                      sky blue, on a white band
+    about                         navy, on a blue-tinted band
+    stack                         slate blue
+  Contrast of accent text, light theme (on tint / page or band / card):
+    sky 5.1 / 5.5 / 5.9   navy 8.8 / 9.2 / 10.4   slate 8.8 / 9.7 / 10.4
+  Dark theme:
+    sky 8.6 / 11.3 / 10.6   periwinkle 7.6 / 8.5 / 8.7   slate 8.5 / 10.2 / 9.6
 */
+:root,
+[data-theme='light'] {
+  --band-light: #ffffff;
+  --band-tint: #edf1fb;
+}
+
+:root[data-theme='dark'] {
+  --band-light: #18191c;
+  --band-tint: #141a28;
+}
+
 #services {
-  --accent: #0f766e;
-  --accent-mark: #0d9488;
-  --accent-soft: #e3f4f1;
+  --accent: #0369a1;
+  --accent-mark: #0284c7;
+  --accent-soft: #e3f1fa;
 }
 
 #about {
-  --accent: #9a4a06;
-  --accent-mark: #d97706;
-  --accent-soft: #fbefdd;
-}
-
-#process {
-  --accent: #be123c;
-  --accent-mark: #e11d48;
-  --accent-soft: #fce9ee;
+  --accent: #1e3a8a;
+  --accent-mark: #1e40af;
+  --accent-soft: #e6ebf8;
 }
 
 #stack {
@@ -102,21 +111,15 @@
 }
 
 :root[data-theme='dark'] #services {
-  --accent: #4fd1c5;
-  --accent-mark: #14b8a6;
-  --accent-soft: #12302e;
+  --accent: #7dd3fc;
+  --accent-mark: #38bdf8;
+  --accent-soft: #10293a;
 }
 
 :root[data-theme='dark'] #about {
-  --accent: #f2b55f;
-  --accent-mark: #d97706;
-  --accent-soft: #33260f;
-}
-
-:root[data-theme='dark'] #process {
-  --accent: #fb7f99;
-  --accent-mark: #f43f5e;
-  --accent-soft: #3a1620;
+  --accent: #a5b8f5;
+  --accent-mark: #6d8be8;
+  --accent-soft: #1a2340;
 }
 
 :root[data-theme='dark'] #stack {
@@ -509,10 +512,16 @@
     border-top: 1px solid var(--line);
   }
 
-  /* Every second section sits on a lighter band, so neighbours do not merge. */
+  /* Sections alternate background tones, so neighbours do not merge:
+     page, white band, blue-tinted band, white band, page. The bands are
+     slightly see-through, so the backdrop marks still show faintly. */
   #services,
   #process {
-    background: color-mix(in srgb, var(--card) 66%, transparent);
+    background: color-mix(in srgb, var(--band-light) 70%, transparent);
+  }
+
+  #about {
+    background: color-mix(in srgb, var(--band-tint) 88%, transparent);
   }
 
   /* The title carries a short bar in the section's own accent. */
