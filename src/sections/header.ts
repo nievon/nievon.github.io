@@ -7,6 +7,7 @@ import { segmented } from '../ui';
 const links = [
   { href: '#projects', label: ui.navProjects },
   { href: '#services', label: ui.navServices },
+  { href: '#about', label: ui.navAbout },
   { href: '#stack', label: ui.navStack },
   { href: '#contacts', label: ui.navContacts },
 ];
@@ -31,7 +32,7 @@ export function header(): string {
     </a>
     <nav class="nav-desktop ml-auto hidden items-center gap-1 md:flex${drop(80)}" aria-label="${esc(t(ui.navLabel))}">${nav}<span class="nav-ind" aria-hidden="true"></span></nav>
     <div class="ml-auto flex items-center gap-2 md:ml-2${drop(160)}">
-      <a class="btn btn-primary btn-nav hidden md:inline-flex" href="#contacts">${esc(t(ui.navCta))}</a>
+      <a class="btn btn-primary btn-nav hidden lg:inline-flex" href="#contacts">${esc(t(ui.navCta))}</a>
       ${segmented({
         label: t(ui.langLabel),
         action: 'lang',

@@ -2,6 +2,7 @@ import './style.css';
 import { esc, getLang, setLang, t, ui } from './i18n';
 import { icon } from './icons';
 import { footer, contactsSection, processSection } from './sections/outro';
+import { aboutSection } from './sections/about';
 import { backdrop } from './sections/backdrop';
 import { header } from './sections/header';
 import { hero } from './sections/hero';
@@ -19,6 +20,7 @@ app.innerHTML = `
     <section id="top" class="hero"></section>
     <section id="projects" class="section"></section>
     <section id="services" class="section"></section>
+    <section id="about" class="section"></section>
     <section id="process" class="section"></section>
     <section id="stack" class="section"></section>
     <section id="contacts" class="section"></section>
@@ -33,6 +35,7 @@ const regions = {
   projects: projectsSection,
   services: servicesSection,
   stack: stackSection,
+  about: aboutSection,
   process: processSection,
   contacts: contactsSection,
   'site-footer': footer,
@@ -127,13 +130,13 @@ function syncNav(): void {
 
   const marker = window.innerHeight * 0.35;
   let active = '';
-  for (const id of ['projects', 'services', 'process', 'stack', 'contacts']) {
+  for (const id of ['projects', 'services', 'about', 'process', 'stack', 'contacts']) {
     if (document.getElementById(id)!.getBoundingClientRect().top <= marker) active = id;
   }
   // The last section is short, so the end of the page counts as reaching it.
   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) active = 'contacts';
-  // The process section has no link of its own; it reads as part of services.
-  if (active === 'process') active = 'services';
+  // The process section has no link of its own; it continues the About section.
+  if (active === 'process') active = 'about';
   const changed = active !== currentSection;
   currentSection = active;
 

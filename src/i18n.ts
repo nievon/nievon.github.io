@@ -83,6 +83,36 @@ export const ui = {
   stackReset: { ru: 'Сбросить', en: 'Clear' },
   stackHint: { ru: 'Технология не выбрана', en: 'No technology selected' },
 
+  navAbout: { ru: 'Обо мне', en: 'About' },
+  aboutTitle: { ru: 'Обо мне', en: 'About me' },
+  aboutLead: {
+    ru: 'Я Никита, fullstack-разработчик с фокусом на backend. **Больше трёх лет** делаю для бизнеса сайты, интернет-магазины, панели управления и Telegram-ботов.',
+    en: 'I am Nikita, a fullstack developer focused on backend. For **more than three years** I have been building websites, online stores, admin panels and Telegram bots for businesses.',
+  },
+  aboutApproach: {
+    ru: 'Мне важно, чтобы заказчик понимал, за что платит. Поэтому я объясняю решения простым языком, называю срок и стоимость до начала работы и показываю результат по частям.',
+    en: 'It matters to me that a client understands what they are paying for. So I explain decisions in plain language, name the timeline and price before work starts, and show the result part by part.',
+  },
+  aboutStack: {
+    ru: 'Основной стек: PHP и Laravel, Python, SQL. Работаю с 1С-Битрикс и WordPress, подключаю эквайринг и CRM. Образование: информационные технологии.',
+    en: 'My main stack is PHP and Laravel, Python and SQL. I work with 1C-Bitrix and WordPress, and connect payment acquiring and CRMs. My education is in information technology.',
+  },
+  aboutClearTitle: { ru: 'Говорю понятно', en: 'Plain language' },
+  aboutClearText: {
+    ru: 'Объясняю без терминов, что делаю и зачем это бизнесу.',
+    en: 'I explain what I am doing and why the business needs it, without jargon.',
+  },
+  aboutTurnkeyTitle: { ru: 'Делаю под ключ', en: 'End to end' },
+  aboutTurnkeyText: {
+    ru: 'От разработки до запуска и обслуживания, один исполнитель на весь проект.',
+    en: 'From development to launch and maintenance, one person for the whole project.',
+  },
+  aboutHonestTitle: { ru: 'Без сюрпризов', en: 'No surprises' },
+  aboutHonestText: {
+    ru: 'Срок и стоимость известны до старта, результат виден по частям.',
+    en: 'The timeline and price are known before the start, and the result is visible part by part.',
+  },
+
   processTitle: { ru: 'Как выстроена работа', en: 'How the work is organised' },
   processLead: {
     ru: 'Делаю проекты под ключ: от разработки до установки и обслуживания сайта или приложения.',

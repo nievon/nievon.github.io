@@ -1268,6 +1268,57 @@
 
   /* --- Process and contacts ---------------------------------------------- */
 
+  /* --- About ------------------------------------------------------------- */
+
+  .about-lead {
+    margin-top: 20px;
+    max-width: 38rem;
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+  }
+
+  .about-text {
+    margin-top: 16px;
+    max-width: 36rem;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--fg2);
+  }
+
+  .about-list {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+
+  .about-item {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    border-radius: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+  }
+
+  .about-item h3 {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .about-item p {
+    margin-top: 4px;
+    font-size: 15px;
+    line-height: 22px;
+    color: var(--fg2);
+  }
+
   /* The steps are a real sequence, so they sit on a rail. The rail fills as
      the section scrolls past (--tl), and each node lights up as it appears. */
   @media (min-width: 1024px) {
@@ -1779,6 +1830,7 @@
   .sheet,
   .contact-list,
   .tl-step,
+  .about-item,
   .service-row,
   #stack .grid > div {
     break-inside: avoid;
