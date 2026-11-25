@@ -2150,11 +2150,18 @@
    A long page of stacked cards reads as one endless strip. On a phone, groups of
    equal cards become rows that swipe sideways with snapping, the next card
    peeking in from the right, and dots showing the position. */
+/* Phone only: on wider screens the rows are ordinary grids and need no position marks. */
 .swipe-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 16px;
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .swipe-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
 }
 
 .swipe-dots span {
@@ -2609,6 +2616,7 @@
   }
 
   .backdrop,
+  .swipe-dots,
   .hero-bg,
   .timeline::after {
     display: none;
