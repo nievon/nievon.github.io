@@ -72,13 +72,22 @@ const hl = (p: Project) =>
   `data-stack="${p.stack.join(' ')}" data-hl="${!!state.tech && p.stack.includes(state.tech)}"`;
 
 function photo(p: Project): string {
-  const url = photoUrl.get(p.id);
-  if (url) {
-    return `<figure class="case-photo"><img src="${url}" alt="${esc(t(p.photo!.alt))}" loading="lazy" decoding="async" /></figure>`;
+  const light = photoUrl.get(p.id);
+  const dark = photoUrl.get(`${p.id}-dark`);
+  if (light) {
+    // The screenshot sits in the slot as a window, cut off on the right and bottom.
+    // A `-dark` file, when present, replaces it in the dark theme.
+    return `
+    <figure class="case-photo has-shot${dark ? ' has-dark' : ''}">
+      <div class="shot">
+        <img class="shot-light" src="${light}" alt="${esc(t(p.photo!.alt))}" loading="lazy" decoding="async" />
+        ${dark ? `<img class="shot-dark" src="${dark}" alt="${esc(t(p.photo!.alt))}" loading="lazy" decoding="async" />` : ''}
+      </div>
+    </figure>`;
   }
   // Empty slot. The file hint is for the site owner and is left out of the production build.
   const hint = import.meta.env.DEV
-    ? `<span>${esc(t(ui.photoSlot))}</span><code>src/assets/projects/${p.id}.jpg</code>`
+    ? `<span>${esc(t(ui.photoSlot))}</span><code>src/assets/projects/${p.id}.webp</code>`
     : '';
   return `<div class="case-photo is-empty print:hidden" aria-hidden="true">${icon('image', 18)}${hint}</div>`;
 }

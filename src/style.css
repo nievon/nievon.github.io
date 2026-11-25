@@ -639,12 +639,51 @@
     }
   }
 
+  /* Screenshot as a window: pinned to the top-left of the slot, running off
+     the right and bottom edges, so the top of the site is shown at a readable size. */
+  .shot {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    right: -55%;
+    bottom: 0;
+    overflow: hidden;
+    border-radius: 10px 0 0 0;
+    border: 1px solid var(--line-strong);
+    border-right: 0;
+    border-bottom: 0;
+    box-shadow: var(--shadow-lift);
+    background: var(--card);
+  }
+
+  @media (max-width: 959px) {
+    .shot {
+      top: 20px;
+      left: 20px;
+      right: -25%;
+    }
+  }
+
   .case-photo img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: left top;
+  }
+
+  /* The screenshot follows the site's own theme when a dark variant exists. */
+  .shot-dark {
+    display: none;
+  }
+
+  :root[data-theme='dark'] .has-dark .shot-light {
+    display: none;
+  }
+
+  :root[data-theme='dark'] .has-dark .shot-dark {
+    display: block;
   }
 
   .case-photo.is-empty {
@@ -1714,6 +1753,21 @@
   .case-photo img {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  .shot {
+    inset: 0;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: none;
+  }
+
+  .has-dark .shot-light {
+    display: block !important;
+  }
+
+  .has-dark .shot-dark {
+    display: none !important;
   }
 
   .case-body {
