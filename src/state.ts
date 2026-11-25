@@ -1,7 +1,7 @@
 export type Theme = 'dark' | 'light';
 
 /** Phone layout. A few blocks render differently there (accordion, tabs). */
-export const phone = window.matchMedia('(max-width: 767px)');
+export const phone = window.matchMedia('screen and (max-width: 767px)');
 
 export const state = {
   theme: (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light') as Theme,

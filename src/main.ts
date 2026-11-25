@@ -385,6 +385,11 @@ app.addEventListener('click', (event) => {
   }
 });
 
+// Printing from a phone: `phone` is a screen-only query, so it stops matching for
+// the print pass. Rebuild the blocks that branch on it before and after printing.
+window.addEventListener('beforeprint', () => render('services', 'stack'));
+window.addEventListener('afterprint', () => render('services', 'stack'));
+
 // Blocks that change shape between phone and wider screens are rebuilt when the breakpoint is crossed.
 phone.addEventListener('change', () => render('services', 'stack'));
 

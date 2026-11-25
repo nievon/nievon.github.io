@@ -8,7 +8,7 @@ const all: Project[] = [
     featured: true,
     title: { ru: 'Swageda.ru', en: 'Swageda.ru' },
     kind: { ru: 'Платформа рецептов', en: 'Recipe platform' },
-    photo: { alt: { ru: 'Главная страница Swageda.ru', en: 'Swageda.ru home page' } },
+    photo: { alt: { ru: 'Каталог рецептов на Swageda.ru', en: 'Recipe catalogue on Swageda.ru' } },
     status: { tone: 'live', label: { ru: 'Сайт работает', en: 'Live' } },
     links: [
       { kind: 'site', label: { ru: 'swageda.ru', en: 'swageda.ru' }, url: 'https://swageda.ru' },
@@ -192,7 +192,7 @@ const all: Project[] = [
     visible: true,
     title: { ru: 'Студия кройки и шитья «Натура»', en: 'Natura sewing studio' },
     kind: { ru: 'Сайт студии с нуля', en: 'Studio website, built from scratch' },
-    photo: { alt: { ru: 'Сайт студии «Натура»', en: 'Natura studio website' } },
+    photo: { alt: { ru: 'Главная страница сайта студии «Натура»', en: 'Home page of the Natura studio website' } },
     status: { tone: 'live', label: { ru: 'Сайт работает', en: 'Live' } },
     links: [
       {
@@ -239,7 +239,7 @@ const all: Project[] = [
       ru: 'Запись клиентов и продажи в мессенджерах',
       en: 'Bookings and sales in messengers',
     },
-    photo: { alt: { ru: 'Интерфейс Chatvix AI', en: 'Chatvix AI interface' } },
+    photo: { alt: { ru: 'Главная страница Chatvix AI', en: 'Chatvix AI landing page' } },
     status: { tone: 'active', label: { ru: 'В развитии', en: 'In development' } },
     links: [],
     hook: {

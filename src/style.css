@@ -243,7 +243,7 @@
   }
 
   /* On a phone there are no margins to sit in, so the marks are smaller and fainter. */
-  @media (max-width: 767px) {
+  @media screen and (max-width: 767px) {
     .mark {
       scale: 0.6;
       opacity: calc(var(--mark-opacity) * 0.7);
@@ -339,7 +339,7 @@
     transform: translateY(-1px) scale(1.08);
   }
 
-  @media (max-width: 767px) {
+  @media screen and (max-width: 767px) {
     /* Room for the tab bar, so it never covers the last block. */
     body {
       padding-bottom: calc(57px + env(safe-area-inset-bottom));
@@ -1150,7 +1150,7 @@
     display: none;
   }
 
-  @media (max-width: 767px) {
+  @media screen and (max-width: 767px) {
     .fold {
       grid-template-rows: 0fr;
       opacity: 0;
@@ -1182,9 +1182,7 @@
     }
 
     /* Folded, the pair needs no shared height. */
-    .case-row {
-      gap: 16px;
-    }
+  
   }
 
   /* All cases share one container: a two-column grid on wide screens, where the
@@ -1233,17 +1231,6 @@
   }
 
   /* Compact cases: side by side, equal height, footer pinned to the bottom. */
-  .case-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  @media (min-width: 768px) {
-    .case-row {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
 
   .case-compact {
     display: flex;
@@ -1255,9 +1242,7 @@
 
   /* Closed, the pair shares one height. Once either card is open, each keeps
      its own height, so the neighbour does not stretch to match. */
-  .case-row:has(.case-more.is-open) {
-    align-items: start;
-  }
+
 
   .case-compact .case-foot {
     margin-top: auto;
@@ -2008,15 +1993,12 @@
     }
   }
 
-  .enter-2 {
-    animation-delay: 60ms;
-  }
 }
 
 /* --- Phone polish ---------------------------------------------------------
    Touch targets of at least 44px with 8px between them, 16px body text,
    full-width primary actions, and content kept clear of notches. */
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) {
   #app .mx-auto,
   .hero-inner {
     padding-left: max(20px, env(safe-area-inset-left));
@@ -2155,7 +2137,7 @@
   display: none;
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) {
   .swipe-dots {
     display: flex;
     justify-content: center;
@@ -2179,7 +2161,7 @@
   background: var(--accent-mark);
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) {
   .swipe {
     /* Positioned, so hidden helper text inside off-screen cards is clipped with them
        instead of widening the page. */
@@ -2584,7 +2566,9 @@
     font-size: 26pt;
   }
 
-  .case,
+  /* Cases may continue on the next page; only their small parts are kept whole. */
+  .story-part,
+  .case-photo,
   .sheet,
   .contact-list,
   .tl-step,
@@ -2670,10 +2654,7 @@
     grid-column: 1 / -1;
   }
 
-  .case-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
+
 
   .cta {
     padding: 0;
@@ -2694,6 +2675,46 @@
   }
 
   .backdrop,
+  /* A printed page is narrower than the tablet breakpoint, so the phone-only
+     pieces are switched off by hand and the full story is shown instead. */
+  .lead-outcome.md\:hidden {
+    display: none !important;
+  }
+
+  .story-part.max-md\:hidden {
+    display: block !important;
+  }
+
+  .swipe {
+    overflow: visible;
+  }
+
+  /* Grids do not split across pages well: a plain block flow lets the cases
+     follow their heading and each other without blank pages. */
+  .cases,
+  .service-cards,
+  .about-list {
+    display: block;
+  }
+
+  .cases > .case + .case,
+  .service-cards > * + *,
+  .about-list > * + * {
+    margin-top: 12px;
+  }
+
+  .case-photo-card,
+  .case-photo-card.is-flipped {
+    display: grid;
+  }
+
+  .service-card,
+  .about-item {
+    padding: 8px 0;
+    border: 0;
+    box-shadow: none;
+  }
+
   .swipe-dots,
   .hero-bg,
   .timeline::after {

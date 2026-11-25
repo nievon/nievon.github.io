@@ -6,8 +6,8 @@ export const ui = {
     en: 'Nikita (nievon) — fullstack developer, backend',
   },
   docDescription: {
-    ru: 'Никита (nievon) — fullstack-разработчик с фокусом на backend: серверная логика, API, CRM-связки и платёжные интеграции на аутсорсинге.',
-    en: 'Nikita (nievon) is a fullstack developer focused on backend: server logic, APIs, CRM links and payment integrations, working as an outsourced contractor.',
+    ru: 'Никита (nievon) — fullstack-разработчик: сайты, Telegram-боты и серверная разработка под ключ. Кейсы, услуги и контакты.',
+    en: 'Nikita (nievon), fullstack developer: websites, Telegram bots and server-side development, end to end. Cases, services and contact.',
   },
   skip: { ru: 'К содержимому', en: 'Skip to content' },
 
