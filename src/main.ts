@@ -4,7 +4,7 @@ import { icon } from './icons';
 import { footer, contactsSection, processSection } from './sections/outro';
 import { aboutSection } from './sections/about';
 import { backdrop } from './sections/backdrop';
-import { header } from './sections/header';
+import { header, tabbar } from './sections/header';
 import { hero } from './sections/hero';
 import { projectsSection } from './sections/projects';
 import { stackResult, stackSection } from './sections/stack';
@@ -26,6 +26,7 @@ app.innerHTML = `
     <section id="contacts" class="section"></section>
   </main>
   <footer id="site-footer" class="section"></footer>
+  <div id="tabbar" class="tabbar md:hidden print:hidden"></div>
   <p id="live" class="sr-only" aria-live="polite"></p>
   <dialog id="lightbox" class="lightbox"></dialog>`;
 
@@ -39,6 +40,7 @@ const regions = {
   process: processSection,
   contacts: contactsSection,
   'site-footer': footer,
+  tabbar,
 } as const;
 
 type Region = keyof typeof regions;
@@ -122,8 +124,6 @@ function syncScroll(): void {
 // Header state: it is clear over the top of the hero and takes its surface once
 // the page moves; the link of the section in view is marked, and on desktop a
 // line slides under it.
-let currentSection = '';
-
 function syncNav(): void {
   const header = document.getElementById('site-header')!;
   header.classList.toggle('is-scrolled', window.scrollY > 8);
@@ -137,10 +137,8 @@ function syncNav(): void {
   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) active = 'contacts';
   // The process section has no link of its own; it continues the About section.
   if (active === 'process') active = 'about';
-  const changed = active !== currentSection;
-  currentSection = active;
 
-  header.querySelectorAll<HTMLAnchorElement>('.nav-link').forEach((link) => {
+  app.querySelectorAll<HTMLAnchorElement>('.nav-link, .tab-link').forEach((link) => {
     if (link.getAttribute('href') === `#${active}`) link.setAttribute('aria-current', 'true');
     else link.removeAttribute('aria-current');
   });
@@ -155,16 +153,6 @@ function syncNav(): void {
     line.classList.add('is-on');
   } else {
     line.classList.remove('is-on');
-  }
-  // On mobile the link row scrolls sideways; keep the current link in view.
-  // Only the row itself is scrolled, so the page's own scrolling is not disturbed.
-  const row = header.querySelector<HTMLElement>('.mobile-nav > div');
-  const current = row?.querySelector<HTMLElement>(`.nav-link[href="#${active}"]`);
-  if (changed && row && current && row.offsetWidth) {
-    row.scrollTo({
-      left: current.offsetLeft - (row.offsetWidth - current.offsetWidth) / 2,
-      behavior: reducedMotion.matches ? 'auto' : 'smooth',
-    });
   }
 }
 
@@ -231,6 +219,13 @@ const announce = (text: string) => {
   document.getElementById('live')!.textContent = text;
 };
 
+/** Keep the browser and installed-app chrome in the page's own colour. */
+function syncThemeColor(): void {
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', state.theme === 'dark' ? '#111214' : '#f7f7f5');
+}
+
 /** Swap page state under a short cross-fade where the browser supports it. */
 function crossfade(update: () => void): void {
   if ('startViewTransition' in document && !reducedMotion.matches) document.startViewTransition(update);
@@ -295,6 +290,7 @@ app.addEventListener('click', (event) => {
       crossfade(() => {
         state.theme = next;
         document.documentElement.dataset.theme = next;
+        syncThemeColor();
         render('site-header');
       });
       try {
@@ -359,6 +355,7 @@ document.getElementById('lightbox')!.addEventListener('click', (event) => {
 });
 
 syncDocument();
+syncThemeColor();
 render();
 syncScroll();
 heroLight();

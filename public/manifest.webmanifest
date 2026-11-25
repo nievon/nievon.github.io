@@ -1,0 +1,13 @@
+{
+  "name": "Никита (nievon) — fullstack-разработчик",
+  "short_name": "nievon",
+  "description": "Портфолио: сайты, Telegram-боты и серверная разработка под ключ.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#f7f7f5",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

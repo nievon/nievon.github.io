@@ -31,7 +31,6 @@ export const ui = {
   },
   heroPrimary: { ru: 'Смотреть кейсы', en: 'See the projects' },
   heroSecondary: { ru: 'Обсудить проект', en: 'Discuss a project' },
-  navCta: { ru: 'Обсудить проект', en: 'Discuss a project' },
   factsTitle: { ru: 'Коротко', en: 'At a glance' },
   factExperience: { ru: 'Опыт', en: 'Experience' },
   factExperienceValue: { ru: '3+ года в разработке', en: '3+ years in development' },

@@ -1,15 +1,16 @@
 import { contacts } from '../data/contacts';
 import { esc, getLang, t, ui } from '../i18n';
-import { icon } from '../icons';
+import { icon, type IconName } from '../icons';
 import { state } from '../state';
+import type { L } from '../types';
 import { segmented } from '../ui';
 
-const links = [
-  { href: '#projects', label: ui.navProjects },
-  { href: '#services', label: ui.navServices },
-  { href: '#about', label: ui.navAbout },
-  { href: '#stack', label: ui.navStack },
-  { href: '#contacts', label: ui.navContacts },
+const links: { href: string; label: L; short: L; icon: IconName }[] = [
+  { href: '#projects', label: ui.navProjects, short: ui.navProjects, icon: 'briefcase' },
+  { href: '#services', label: ui.navServices, short: ui.navServices, icon: 'layoutDashboard' },
+  { href: '#about', label: ui.navAbout, short: ui.navAbout, icon: 'user' },
+  { href: '#stack', label: ui.navStack, short: ui.navStack, icon: 'codeXml' },
+  { href: '#contacts', label: ui.navContacts, short: ui.navContacts, icon: 'send' },
 ];
 
 // The entrance plays once, on first load.
@@ -32,7 +33,6 @@ export function header(): string {
     </a>
     <nav class="nav-desktop ml-auto hidden items-center gap-1 md:flex${drop(80)}" aria-label="${esc(t(ui.navLabel))}">${nav}<span class="nav-ind" aria-hidden="true"></span></nav>
     <div class="ml-auto flex items-center gap-2 md:ml-2${drop(160)}">
-      <a class="btn btn-primary btn-nav hidden lg:inline-flex" href="#contacts">${esc(t(ui.navCta))}</a>
       ${segmented({
         label: t(ui.langLabel),
         action: 'lang',
@@ -51,8 +51,18 @@ export function header(): string {
         ${icon('github', 18)}
       </a>
     </div>
-  </div>
-  <nav class="mobile-nav md:hidden${drop(160)}" aria-label="${esc(t(ui.navLabel))}">
-    <div class="mx-auto flex max-w-[1120px] gap-1 overflow-x-auto px-3 pb-2">${nav}</div>
+  </div>`;
+}
+
+/** Bottom tab bar: the top-level navigation on a phone, within thumb reach. */
+export function tabbar(): string {
+  return `
+  <nav class="tabbar-inner" aria-label="${esc(t(ui.navLabel))}">
+    ${links
+      .map(
+        (l) =>
+          `<a class="tab-link" href="${l.href}">${icon(l.icon, 20)}<span>${esc(t(l.short))}</span></a>`,
+      )
+      .join('')}
   </nav>`;
 }

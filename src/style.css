@@ -173,6 +173,33 @@
     outline: none;
   }
 
+  /* Page scrollbar in the site's own tones: a thin thumb on a clear track. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: var(--line-strong);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-mark);
+    background-clip: content-box;
+  }
+
   ::selection {
     background: color-mix(in srgb, var(--accent-mark) 30%, transparent);
   }
@@ -247,6 +274,93 @@
     position: relative;
   }
 
+  /* --- Phone: app-like shell ----------------------------------------------
+     Top-level navigation moves to a tab bar at the bottom, within thumb reach.
+     It is a translucent floating layer and respects the home-indicator area. */
+  .tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: saturate(160%) blur(18px);
+    backdrop-filter: saturate(160%) blur(18px);
+    border-top: 1px solid var(--line);
+  }
+
+  .tabbar-inner {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 4px;
+  }
+
+  .tab-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 56px;
+    padding: 6px 2px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 14px;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color 200ms var(--ease),
+      scale 160ms var(--ease);
+  }
+
+  .tab-link span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tab-link .icon {
+    transition: transform 300ms var(--ease);
+  }
+
+  .tab-link:active {
+    scale: 0.94;
+  }
+
+  .tab-link[aria-current] {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .tab-link[aria-current] .icon {
+    transform: translateY(-1px) scale(1.08);
+  }
+
+  @media (max-width: 767px) {
+    /* Room for the tab bar, so it never covers the last block. */
+    body {
+      padding-bottom: calc(57px + env(safe-area-inset-bottom));
+    }
+
+    html {
+      scroll-padding-top: 64px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .site-header > div {
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+
+    /* On a phone the page has no margins for the backdrop marks; they would sit under the text. */
+    .backdrop {
+      display: none;
+    }
+  }
+
   /* Line under the current section's link. It moves with transform only. */
   .nav-ind {
     position: absolute;
@@ -272,9 +386,6 @@
     color: var(--fg);
   }
 
-  .mobile-nav .nav-link[aria-current] {
-    background: var(--raised);
-  }
 
   .skip-link {
     position: absolute;
@@ -311,10 +422,6 @@
   .nav-link:hover {
     color: var(--fg);
     background: var(--raised);
-  }
-
-  .mobile-nav {
-    scrollbar-width: none;
   }
 
   .icon-btn {
@@ -388,13 +495,6 @@
 
   .btn-primary:hover {
     background: color-mix(in srgb, var(--btn-bg) 88%, var(--bg));
-  }
-
-  .btn-nav {
-    height: 36px;
-    padding: 0 16px;
-    border-radius: 8px;
-    font-size: 14px;
   }
 
   .btn-quiet {
@@ -559,7 +659,7 @@
     align-items: center;
     overflow: hidden;
     min-height: calc(100svh - var(--header-h));
-    --header-h: 101px;
+    --header-h: 114px;
     --mx: 68%;
     --my: 34%;
   }
