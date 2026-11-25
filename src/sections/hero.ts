@@ -44,7 +44,7 @@ export function hero(): string {
     <div>
       <h1 class="hero-title${animate ? ' is-typing' : ''}" style="--step:${TYPE_STEP}ms" aria-label="${esc(`${name} ${role}`)}">
         <span class="block" aria-hidden="true">${first.html}</span>
-        <span class="block text-fg2${animate ? ' hero-late' : ''}"${animate ? ` style="--wait:${after}ms"` : ''} aria-hidden="true">${esc(role)}</span>
+        <span class="block text-fg2 ${animate ? 'hero-late' : ''}"${animate ? ` style="--wait:${after}ms"` : ''} aria-hidden="true">${esc(role)}</span>
       </h1>
       <div${late(140)}>
         <p class="mt-6 max-w-[34rem] text-[18px] leading-7 text-fg2">${rich(t(ui.heroLead))}</p>

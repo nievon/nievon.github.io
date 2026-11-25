@@ -21,18 +21,18 @@ export function header(): string {
   // Brand, links and controls drop in one after another.
   const first = !played;
   played = true;
-  const drop = (wait: number) => (first ? ` hdr-in" style="--wait:${wait}ms` : '');
+  const drop = (wait: number) => (first ? `hdr-in" style="--wait:${wait}ms` : '');
   const themeLabel = t(state.theme === 'dark' ? ui.themeToLight : ui.themeToDark);
 
   return `
   <a class="skip-link" href="#main">${esc(t(ui.skip))}</a>
   <div class="mx-auto flex h-14 max-w-[1120px] items-center gap-4 px-5">
-    <a href="#top" class="flex items-baseline gap-2 py-2 text-fg no-underline${drop(0)}">
+    <a href="#top" class="flex items-baseline gap-2 py-2 text-fg no-underline ${drop(0)}">
       <span class="text-[16px] font-medium">${esc(t(contacts.name))}</span>
       <span class="font-mono text-[12px] text-muted">${contacts.handle}</span>
     </a>
-    <nav class="nav-desktop ml-auto hidden items-center gap-1 md:flex${drop(80)}" aria-label="${esc(t(ui.navLabel))}">${nav}<span class="nav-ind" aria-hidden="true"></span></nav>
-    <div class="ml-auto flex items-center gap-2 md:ml-2${drop(160)}">
+    <nav class="nav-desktop ml-auto hidden items-center gap-1 md:flex ${drop(80)}" aria-label="${esc(t(ui.navLabel))}">${nav}<span class="nav-ind" aria-hidden="true"></span></nav>
+    <div class="ml-auto flex items-center gap-2 md:ml-2 ${drop(160)}">
       ${segmented({
         label: t(ui.langLabel),
         action: 'lang',
