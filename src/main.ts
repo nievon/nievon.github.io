@@ -312,6 +312,15 @@ app.addEventListener('click', (event) => {
       break;
     }
 
+    case 'fold': {
+      // Toggled in place, so the case opens and closes with a transition.
+      const id = el.dataset.project!;
+      const open = (state.unfolded[id] = !state.unfolded[id]);
+      el.setAttribute('aria-expanded', String(open));
+      document.getElementById(`fold-${id}`)!.classList.toggle('is-open', open);
+      break;
+    }
+
     case 'tech': {
       const previous = state.tech;
       state.tech = value && value !== previous ? value : null;

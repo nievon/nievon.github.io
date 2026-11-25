@@ -53,6 +53,8 @@ export const ui = {
     ru: 'Проект под NDA, детали не раскрываю',
     en: 'Under NDA, details are not disclosed',
   },
+  foldOpen: { ru: 'Показать кейс', en: 'Show the case' },
+  foldClose: { ru: 'Свернуть', en: 'Collapse' },
   more: { ru: 'Подробнее', en: 'More' },
   zoom: { ru: 'Открыть крупнее', en: 'View larger' },
   zoomOf: { ru: 'Открыть скриншот крупнее: {name}', en: 'View the screenshot larger: {name}' },

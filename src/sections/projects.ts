@@ -126,6 +126,20 @@ function photoCase(p: Project, index: number): string {
   </article>`;
 }
 
+/**
+ * On a phone the cases without a photo start folded to their title and headline,
+ * so the list stays short. The fold only exists below the tablet breakpoint;
+ * on wider screens the content is always shown and the toggle is hidden.
+ */
+function fold(p: Project, content: string): string {
+  const open = !!state.unfolded[p.id];
+  return `
+    <button type="button" class="fold-toggle md:hidden print:hidden" data-action="fold" data-project="${p.id}" data-key="fold:${p.id}" aria-expanded="${open}" aria-controls="fold-${p.id}">
+      <span class="when-closed">${esc(t(ui.foldOpen))}</span><span class="when-open">${esc(t(ui.foldClose))}</span>${icon('chevronDown')}
+    </button>
+    <div id="fold-${p.id}" class="fold${open ? ' is-open' : ''}"><div class="fold-inner">${content}</div></div>`;
+}
+
 /** A wide case without a photo: the story runs in three columns. */
 function wideCase(p: Project): string {
   return `
@@ -135,7 +149,9 @@ function wideCase(p: Project): string {
       ${meta(p)}
     </div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
-    <div class="story story-columns">
+    ${fold(
+      p,
+      `<div class="story story-columns">
       ${part(t(ui.storyProblem), t(p.story.problem), false, 2)}
       ${part(t(ui.storySolution), t(p.story.solution), false, 3)}
       ${part(t(ui.storyOutcome), t(p.story.outcome), true, 4)}
@@ -144,7 +160,8 @@ function wideCase(p: Project): string {
       ${links(p)}
       ${disclosure(p, t(ui.viewTech))}
     </div>
-    ${more(p, tech(p))}
+    ${more(p, tech(p))}`,
+    )}
   </article>`;
 }
 
@@ -154,7 +171,9 @@ function compactCase(p: Project, index: number): string {
   <article id="project-${p.id}" class="case case-compact" ${hl(p)} data-reveal="${index % 2 ? 'right' : 'left'}">
     <div data-s style="--i:0">${title(p, false)}</div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
-    <div class="story">
+    ${fold(
+      p,
+      `<div class="story">
       ${part(t(ui.storyOutcome), t(p.story.outcome), true)}
     </div>
     ${more(
@@ -169,7 +188,8 @@ function compactCase(p: Project, index: number): string {
       ${links(p)}
       ${disclosure(p, t(ui.more))}
     </div>
-    ${p.confidential || p.status ? `<p class="case-note">${meta(p)}</p>` : ''}
+    ${p.confidential || p.status ? `<p class="case-note">${meta(p)}</p>` : ''}`,
+    )}
   </article>`;
 }
 
