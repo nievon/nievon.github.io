@@ -17,10 +17,15 @@ const photoUrl = new Map(
   Object.entries(photoFiles).map(([path, url]) => [path.split('/').pop()!.replace(/\.[^.]+$/, ''), url]),
 );
 
-function meta(p: Project): string {
-  if (p.confidential) return `<span class="status">${icon('lock')}${esc(t(ui.confidential))}</span>`;
+/** Whether the site is live or still in development. */
+function status(p: Project): string {
   if (!p.status) return '';
   return `<span class="status" data-tone="${p.status.tone}"><span class="status-dot" aria-hidden="true"></span>${esc(t(p.status.label))}</span>`;
+}
+
+/** Note for a project whose client asked not to disclose details. */
+function nda(p: Project): string {
+  return p.confidential ? `<span class="status">${icon('lock')}${esc(t(ui.confidential))}</span>` : '';
 }
 
 function links(p: Project): string {
@@ -132,7 +137,7 @@ function photoCase(p: Project, index: number): string {
     <div class="case-body">
       <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
         ${title(p)}
-        ${meta(p)}
+        ${status(p)}
       </div>
       <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
       ${story(p, false)}
@@ -157,7 +162,7 @@ function wideCase(p: Project): string {
     ${banner(p)}
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
       ${title(p)}
-      ${meta(p)}
+      ${status(p)}
     </div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
     ${story(p, true)}
@@ -191,7 +196,7 @@ function compactCase(p: Project, index: number): string {
       ${links(p)}
       ${disclosure(p, t(ui.more))}
     </div>
-    ${p.confidential || p.status ? `<p class="case-note">${meta(p)}</p>` : ''}
+    ${p.confidential || p.status ? `<p class="case-note">${status(p)}${nda(p)}</p>` : ''}
   </article>`;
 }
 

@@ -65,6 +65,7 @@ const all: Project[] = [
       ru: 'Магазин технически сложной продукции',
       en: 'Store for technically complex products',
     },
+    status: { tone: 'live', label: { ru: 'Сайт работает', en: 'Live' } },
     confidential: true,
     links: [],
     hook: {
@@ -104,6 +105,7 @@ const all: Project[] = [
       en: 'Car rental: booking site and CRM',
     },
     kind: { ru: 'Сайт бронирования и CRM', en: 'Booking site and CRM' },
+    status: { tone: 'live', label: { ru: 'Сайт работает', en: 'Live' } },
     confidential: true,
     links: [],
     hook: {
