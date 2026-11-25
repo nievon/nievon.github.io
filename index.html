@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Никита (nievon) — fullstack-разработчик, backend</title>
+    <meta
+      name="description"
+      content="Никита (nievon) — fullstack-разработчик с фокусом на backend: серверная логика, API, CRM-связки и платёжные интеграции на аутсорсинге."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <script>
+      // Set theme and language before first paint to avoid a flash.
+      (function () {
+        document.documentElement.classList.add('js');
+        try {
+          var t = localStorage.getItem('theme-v2');
+          if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+          var l = localStorage.getItem('lang');
+          if (l !== 'ru' && l !== 'en') l = (navigator.language || 'ru').toLowerCase().indexOf('ru') === 0 ? 'ru' : 'en';
+          document.documentElement.lang = l;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
