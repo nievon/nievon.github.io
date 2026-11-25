@@ -639,28 +639,113 @@
     }
   }
 
-  /* Screenshot as a window: pinned to the top-left of the slot, running off
-     the right and bottom edges, so the top of the site is shown at a readable size. */
-  .shot {
-    position: absolute;
-    top: 28px;
-    left: 28px;
-    right: -55%;
-    bottom: 0;
-    overflow: hidden;
-    border-radius: 10px 0 0 0;
-    border: 1px solid var(--line-strong);
-    border-right: 0;
-    border-bottom: 0;
-    box-shadow: var(--shadow-lift);
-    background: var(--card);
+  /* A screenshot fills its slot edge to edge. It is a button: a click opens it larger. */
+  button.case-photo {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--line);
+    cursor: zoom-in;
   }
 
-  @media (max-width: 959px) {
-    .shot {
-      top: 20px;
-      left: 20px;
-      right: -25%;
+  button.case-photo:focus-visible {
+    outline-offset: 2px;
+    border-radius: 12px;
+  }
+
+  .shot-zoom {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+    color: var(--fg);
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 200ms var(--ease),
+      transform 200ms var(--ease);
+  }
+
+  button.case-photo:hover .shot-zoom,
+  button.case-photo:focus-visible .shot-zoom {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Without hover the hint is always there. */
+  @media (hover: none) {
+    .shot-zoom {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Viewer for a screenshot at full size. */
+  .lightbox {
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(10, 11, 13, 0.72);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .lightbox img {
+    display: block;
+    max-width: min(1280px, 94vw);
+    max-height: 88vh;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    color: #edeef0;
+  }
+
+  .lightbox-close:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .lightbox[open] {
+    animation: lightbox-in 320ms var(--ease);
+  }
+
+  .lightbox[open]::backdrop {
+    animation: fade-in 240ms var(--ease);
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
     }
   }
 
@@ -1755,11 +1840,8 @@
     print-color-adjust: exact;
   }
 
-  .shot {
-    inset: 0;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    box-shadow: none;
+  .shot-zoom {
+    display: none;
   }
 
   .has-dark .shot-light {

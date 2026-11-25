@@ -75,15 +75,15 @@ function photo(p: Project): string {
   const light = photoUrl.get(p.id);
   const dark = photoUrl.get(`${p.id}-dark`);
   if (light) {
-    // The screenshot sits in the slot as a window, cut off on the right and bottom.
-    // A `-dark` file, when present, replaces it in the dark theme.
+    // The screenshot fills the slot edge to edge, anchored to its top-left corner,
+    // and opens larger on click. A `-dark` file, when present, replaces it in the dark theme.
+    const alt = esc(t(p.photo!.alt));
     return `
-    <figure class="case-photo has-shot${dark ? ' has-dark' : ''}">
-      <div class="shot">
-        <img class="shot-light" src="${light}" alt="${esc(t(p.photo!.alt))}" loading="lazy" decoding="async" />
-        ${dark ? `<img class="shot-dark" src="${dark}" alt="${esc(t(p.photo!.alt))}" loading="lazy" decoding="async" />` : ''}
-      </div>
-    </figure>`;
+    <button type="button" class="case-photo has-shot${dark ? ' has-dark' : ''}" data-action="zoom" data-key="zoom:${p.id}" aria-label="${esc(t(ui.zoomOf, { name: t(p.title) }))}">
+      <img class="shot-light" src="${light}" alt="${alt}" loading="lazy" decoding="async" />
+      ${dark ? `<img class="shot-dark" src="${dark}" alt="${alt}" loading="lazy" decoding="async" />` : ''}
+      <span class="shot-zoom" aria-hidden="true">${icon('maximize')}${esc(t(ui.zoom))}</span>
+    </button>`;
   }
   // Empty slot. The file hint is for the site owner and is left out of the production build.
   const hint = import.meta.env.DEV

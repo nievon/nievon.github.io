@@ -22,6 +22,7 @@ import {
   LayoutDashboard,
   Lock,
   Mail,
+  Maximize2,
   MessagesSquare,
   Moon,
   Printer,
@@ -34,6 +35,7 @@ import {
   Terminal,
   Workflow,
   Wrench,
+  X,
   type IconNode,
 } from 'lucide';
 
@@ -58,6 +60,7 @@ const set = {
   chefHat: ChefHat,
   chevronDown: ChevronDown,
   clipboardList: ClipboardList,
+  close: X,
   cloud: Cloud,
   codeXml: CodeXml,
   copy: Copy,
@@ -73,6 +76,7 @@ const set = {
   layoutDashboard: LayoutDashboard,
   lock: Lock,
   mail: Mail,
+  maximize: Maximize2,
   messagesSquare: MessagesSquare,
   moon: Moon,
   printer: Printer,

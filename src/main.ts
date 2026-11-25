@@ -1,5 +1,6 @@
 import './style.css';
-import { getLang, setLang, t, ui } from './i18n';
+import { esc, getLang, setLang, t, ui } from './i18n';
+import { icon } from './icons';
 import { footer, contactsSection, processSection } from './sections/outro';
 import { backdrop } from './sections/backdrop';
 import { header } from './sections/header';
@@ -23,7 +24,8 @@ app.innerHTML = `
     <section id="contacts" class="section"></section>
   </main>
   <footer id="site-footer" class="section"></footer>
-  <p id="live" class="sr-only" aria-live="polite"></p>`;
+  <p id="live" class="sr-only" aria-live="polite"></p>
+  <dialog id="lightbox" class="lightbox"></dialog>`;
 
 const regions = {
   'site-header': header,
@@ -322,6 +324,22 @@ app.addEventListener('click', (event) => {
       break;
     }
 
+    case 'zoom': {
+      // Show whichever screenshot is on screen now, so the theme is kept.
+      const shown = [...el.querySelectorAll<HTMLImageElement>('img')].find((img) => img.offsetParent !== null);
+      if (!shown) break;
+      const box = document.getElementById('lightbox') as HTMLDialogElement;
+      box.innerHTML = `
+        <button type="button" class="lightbox-close icon-btn" data-action="zoom-close" aria-label="${esc(t(ui.zoomClose))}">${icon('close', 18)}</button>
+        <img src="${shown.currentSrc || shown.src}" alt="${esc(shown.alt)}" />`;
+      box.showModal();
+      break;
+    }
+
+    case 'zoom-close':
+      (document.getElementById('lightbox') as HTMLDialogElement).close();
+      break;
+
     case 'copy':
       void copy(value, el.dataset.copyKey!);
       break;
@@ -330,6 +348,11 @@ app.addEventListener('click', (event) => {
       window.print();
       break;
   }
+});
+
+// A click on the dimmed area around the picture closes the viewer.
+document.getElementById('lightbox')!.addEventListener('click', (event) => {
+  if (event.target === event.currentTarget) (event.currentTarget as HTMLDialogElement).close();
 });
 
 syncDocument();
