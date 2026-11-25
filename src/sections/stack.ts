@@ -30,7 +30,7 @@ export function stackSection(): string {
         .join('');
       return items
         ? `<div data-reveal>
-            <h3 class="text-[14px] font-medium leading-5 text-fg">${esc(t(g.title))}</h3>
+            <h3 class="text-[14px] font-medium leading-5">${esc(t(g.title))}</h3>
             <ul class="mt-3 flex flex-wrap gap-2">${items}</ul>
           </div>`
         : '';

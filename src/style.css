@@ -75,11 +75,11 @@
     projects, process, contacts   the base blue
     services                      sky blue, on a white band
     about                         navy, on a blue-tinted band
-    stack                         slate blue
+    stack                         the base blue, selected items filled
   Contrast of accent text, light theme (on tint / page or band / card):
-    sky 5.1 / 5.5 / 5.9   navy 8.8 / 9.2 / 10.4   slate 8.8 / 9.7 / 10.4
+    sky 5.1 / 5.5 / 5.9   navy 8.8 / 9.2 / 10.4
   Dark theme:
-    sky 8.6 / 11.3 / 10.6   periwinkle 7.6 / 8.5 / 8.7   slate 8.5 / 10.2 / 9.6
+    sky 9.0 / 11.2 / 10.5   periwinkle 7.9 / 8.9 / 9.0
 */
 :root,
 [data-theme='light'] {
@@ -104,12 +104,6 @@
   --accent-soft: #e6ebf8;
 }
 
-#stack {
-  --accent: #334155;
-  --accent-mark: #475569;
-  --accent-soft: #e9edf2;
-}
-
 :root[data-theme='dark'] #services {
   --accent: #7dd3fc;
   --accent-mark: #38bdf8;
@@ -120,12 +114,6 @@
   --accent: #a5b8f5;
   --accent-mark: #6d8be8;
   --accent-soft: #1a2340;
-}
-
-:root[data-theme='dark'] #stack {
-  --accent: #b6c0ce;
-  --accent-mark: #94a3b8;
-  --accent-soft: #1e242c;
 }
 
 @theme inline {
@@ -1299,14 +1287,16 @@
 
   /* --- Stack ------------------------------------------------------------- */
 
+  /* Technology chips: white tiles that turn blue on hover and fill when selected. */
   .chip {
     display: inline-flex;
     align-items: center;
     min-height: 32px;
     padding: 4px 12px;
     border-radius: 8px;
-    background: var(--raised);
-    border: 1px solid var(--line);
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow-sm);
     color: var(--fg);
     font-family: var(--font-mono);
     font-size: 13px;
@@ -1319,21 +1309,20 @@
   }
 
   button.chip:hover {
-    border-color: var(--line-strong);
-  }
-
-  .chip[aria-pressed='true'] {
     border-color: var(--accent-mark);
     color: var(--accent);
-    background: color-mix(in srgb, var(--accent-mark) 10%, var(--card));
+    background: var(--accent-soft);
   }
 
-  .chip-static {
-    background: transparent;
-    border-color: transparent;
-    padding-left: 0;
-    padding-right: 4px;
-    color: var(--muted);
+  .chip[aria-pressed='true'],
+  button.chip[aria-pressed='true']:hover {
+    border-color: var(--btn-bg);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+  }
+
+  #stack h3 {
+    color: var(--accent);
   }
 
   .stack-result {
