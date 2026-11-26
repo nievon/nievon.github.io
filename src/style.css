@@ -975,74 +975,58 @@
     font-size: 12px;
   }
 
-  /* Case number: large, faint, in the upper right corner of the text area,
-     where only plain text sits over it (the result block below is opaque).
-     It sits behind the content and carries no meaning for screen readers. */
-  .case-body,
-  .m-body,
-  .case-wide,
-  .case-compact {
-    position: relative;
-    isolation: isolate;
+  /* Header row of a case: title, status, then the case number at the far end.
+     The number is part of the row, so nothing can ever overlap it. */
+  .case-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+  }
+
+  .case-head > .case-title {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .case-num {
-    position: absolute;
-    top: 12px;
-    right: 20px;
-    z-index: -1;
-    font-size: 96px;
-    line-height: 0.8;
+    flex: none;
+    font-size: 32px;
+    line-height: 1;
     font-weight: 500;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
     color: var(--accent-mark);
-    opacity: 0.09;
-    pointer-events: none;
+    opacity: 0.28;
     user-select: none;
   }
 
   :root[data-theme='dark'] .case-num {
-    opacity: 0.14;
+    opacity: 0.4;
   }
 
-  .case-compact .case-num {
-    font-size: 80px;
+  /* On a phone the number sits on the screenshot or icon panel, as a small frosted tag. */
+  .m-media {
+    position: relative;
+    flex: none;
   }
 
-  /* The row next to the number keeps clear of it, so the status and title never sit on top of it. */
-  .case-num + * {
-    padding-right: 112px;
-  }
-
-  .case-compact .case-num + * {
-    padding-right: 96px;
-  }
-
-  @media screen and (max-width: 767px) {
-    .case-num {
-      top: 10px;
-      right: 0;
-      font-size: 52px;
-    }
-
-    .case-num + *,
-    .case-compact .case-num + * {
-      padding-right: 44px;
-    }
-  }
-
-  /* Narrower phones: the title no longer keeps clear of the number, so long
-     project names still fit; the number stays behind them as a watermark. */
-  @media screen and (max-width: 389px) {
-    .case-num {
-      font-size: 48px;
-    }
-
-    .case-num + *,
-    .case-compact .case-num + * {
-      padding-right: 0;
-    }
+  .m-media .case-num {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--card) 72%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: var(--accent);
+    opacity: 1;
+    pointer-events: none;
   }
 
   .case-title {
@@ -2558,8 +2542,8 @@
     border-radius: 20px;
   }
 
-  .swipe.cases > .m-card > .case-photo,
-  .swipe.cases > .m-card > .case-banner {
+  .swipe.cases > .m-card .m-media > .case-photo,
+  .swipe.cases > .m-card .m-media > .case-banner {
     flex: none;
     width: 100%;
     min-height: 0;

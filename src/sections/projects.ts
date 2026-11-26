@@ -100,7 +100,7 @@ function photo(p: Project): string {
 // Position of each case on the page, set before the section renders.
 let order = new Map<string, number>();
 
-/** Large faint number of the case, behind its text. */
+/** Faint number of the case: at the end of the card's header row, or on the media on a phone. */
 function num(p: Project): string {
   const n = order.get(p.id);
   return n ? `<span class="case-num print:hidden" aria-hidden="true">${String(n).padStart(2, '0')}</span>` : '';
@@ -144,10 +144,10 @@ function photoCase(p: Project, index: number): string {
   <article id="project-${p.id}" class="case case-photo-card${index % 2 ? ' is-flipped' : ''}" ${hl(p)} data-reveal="case">
     ${photo(p)}
     <div class="case-body">
-      ${num(p)}
-      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
+      <div class="case-head" data-s style="--i:0">
         ${title(p)}
         ${status(p)}
+        ${num(p)}
       </div>
       <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
       ${story(p, false)}
@@ -169,11 +169,11 @@ function banner(p: Project): string {
 function wideCase(p: Project): string {
   return `
   <article id="project-${p.id}" class="case case-wide" ${hl(p)} data-reveal="case">
-    ${num(p)}
     ${banner(p)}
-    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
+    <div class="case-head" data-s style="--i:0">
       ${title(p)}
       ${status(p)}
+      ${num(p)}
     </div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
     ${story(p, true)}
@@ -189,9 +189,8 @@ function wideCase(p: Project): string {
 function compactCase(p: Project, index: number): string {
   return `
   <article id="project-${p.id}" class="case case-compact" ${hl(p)} data-reveal="${index % 2 ? 'right' : 'left'}">
-    ${num(p)}
     ${banner(p)}
-    <div data-s style="--i:0">${title(p, false)}</div>
+    <div class="case-head" data-s style="--i:0">${title(p, false)}${num(p)}</div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
     <div class="story lead-outcome">
       ${part(t(ui.storyOutcome), t(p.story.outcome), true)}
@@ -229,9 +228,8 @@ function phoneCard(p: Project): string {
   const linkRow = links(p);
   return `
   <article id="project-${p.id}" class="case m-card${open ? ' is-open' : ''}" ${hl(p)} data-reveal="case">
-    ${media}
+    <div class="m-media">${media}${num(p)}</div>
     <div class="m-body">
-      ${num(p)}
       ${title(p)}
       <div class="m-meta">${meta}</div>
       <h3 class="case-hook">${esc(t(p.hook))}</h3>
