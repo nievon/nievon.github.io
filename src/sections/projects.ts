@@ -97,6 +97,15 @@ function photo(p: Project): string {
   return `<div class="case-photo is-empty print:hidden" aria-hidden="true">${icon('image', 18)}${hint}</div>`;
 }
 
+// Position of each case on the page, set before the section renders.
+let order = new Map<string, number>();
+
+/** Large faint number of the case, behind its text. */
+function num(p: Project): string {
+  const n = order.get(p.id);
+  return n ? `<span class="case-num print:hidden" aria-hidden="true">${String(n).padStart(2, '0')}</span>` : '';
+}
+
 /** Icon tile, project name and kind. */
 function title(p: Project, withKind = true): string {
   return `
@@ -135,6 +144,7 @@ function photoCase(p: Project, index: number): string {
   <article id="project-${p.id}" class="case case-photo-card${index % 2 ? ' is-flipped' : ''}" ${hl(p)} data-reveal="case">
     ${photo(p)}
     <div class="case-body">
+      ${num(p)}
       <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
         ${title(p)}
         ${status(p)}
@@ -159,6 +169,7 @@ function banner(p: Project): string {
 function wideCase(p: Project): string {
   return `
   <article id="project-${p.id}" class="case case-wide" ${hl(p)} data-reveal="case">
+    ${num(p)}
     ${banner(p)}
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2" data-s style="--i:0">
       ${title(p)}
@@ -178,6 +189,7 @@ function wideCase(p: Project): string {
 function compactCase(p: Project, index: number): string {
   return `
   <article id="project-${p.id}" class="case case-compact" ${hl(p)} data-reveal="${index % 2 ? 'right' : 'left'}">
+    ${num(p)}
     ${banner(p)}
     <div data-s style="--i:0">${title(p, false)}</div>
     <h3 class="case-hook" data-s style="--i:1">${esc(t(p.hook))}</h3>
@@ -219,6 +231,7 @@ function phoneCard(p: Project): string {
   <article id="project-${p.id}" class="case m-card${open ? ' is-open' : ''}" ${hl(p)} data-reveal="case">
     ${media}
     <div class="m-body">
+      ${num(p)}
       ${title(p)}
       <div class="m-meta">${meta}</div>
       <h3 class="case-hook">${esc(t(p.hook))}</h3>
@@ -254,6 +267,7 @@ export function projectsSection(): string {
   const withPhoto = projects.filter((p) => p.photo).sort(byFeatured);
   const wide = projects.filter((p) => !p.photo && p.wide);
   const compact = projects.filter((p) => !p.photo && !p.wide);
+  order = new Map([...withPhoto, ...wide, ...compact].map((p, i) => [p.id, i + 1]));
   return `
   <div class="mx-auto max-w-[1120px] px-5 py-14 md:py-20">
     <h2 class="section-title">${esc(t(ui.projectsTitle))}</h2>

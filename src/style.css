@@ -975,6 +975,76 @@
     font-size: 12px;
   }
 
+  /* Case number: large, faint, in the upper right corner of the text area,
+     where only plain text sits over it (the result block below is opaque).
+     It sits behind the content and carries no meaning for screen readers. */
+  .case-body,
+  .m-body,
+  .case-wide,
+  .case-compact {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .case-num {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    z-index: -1;
+    font-size: 96px;
+    line-height: 0.8;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-mark);
+    opacity: 0.09;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  :root[data-theme='dark'] .case-num {
+    opacity: 0.14;
+  }
+
+  .case-compact .case-num {
+    font-size: 80px;
+  }
+
+  /* The row next to the number keeps clear of it, so the status and title never sit on top of it. */
+  .case-num + * {
+    padding-right: 112px;
+  }
+
+  .case-compact .case-num + * {
+    padding-right: 96px;
+  }
+
+  @media screen and (max-width: 767px) {
+    .case-num {
+      top: 10px;
+      right: 0;
+      font-size: 52px;
+    }
+
+    .case-num + *,
+    .case-compact .case-num + * {
+      padding-right: 44px;
+    }
+  }
+
+  /* Narrower phones: the title no longer keeps clear of the number, so long
+     project names still fit; the number stays behind them as a watermark. */
+  @media screen and (max-width: 389px) {
+    .case-num {
+      font-size: 48px;
+    }
+
+    .case-num + *,
+    .case-compact .case-num + * {
+      padding-right: 0;
+    }
+  }
+
   .case-title {
     display: flex;
     align-items: center;
