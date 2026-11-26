@@ -38,7 +38,8 @@
           var t = localStorage.getItem('theme-v2');
           if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
           var l = localStorage.getItem('lang');
-          if (l !== 'ru' && l !== 'en') l = (navigator.language || 'ru').toLowerCase().indexOf('ru') === 0 ? 'ru' : 'en';
+          // Russian for Russian- and Kazakh-language browsers, English for the rest.
+          if (l !== 'ru' && l !== 'en') l = /^(ru|kk)\b/i.test(navigator.language || 'ru') ? 'ru' : 'en';
           document.documentElement.lang = l;
         } catch (e) {}
       })();
