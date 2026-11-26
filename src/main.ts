@@ -318,6 +318,7 @@ app.addEventListener('click', (event) => {
       const open = (state.unfolded[id] = !state.unfolded[id]);
       el.setAttribute('aria-expanded', String(open));
       document.getElementById(`fold-${id}`)!.classList.toggle('is-open', open);
+      document.getElementById(`project-${id}`)?.classList.toggle('is-open', open);
       break;
     }
 
@@ -389,11 +390,11 @@ app.addEventListener('click', (event) => {
 
 // Printing from a phone: `phone` is a screen-only query, so it stops matching for
 // the print pass. Rebuild the blocks that branch on it before and after printing.
-window.addEventListener('beforeprint', () => render('services', 'stack'));
-window.addEventListener('afterprint', () => render('services', 'stack'));
+window.addEventListener('beforeprint', () => render('projects', 'services', 'stack'));
+window.addEventListener('afterprint', () => render('projects', 'services', 'stack'));
 
 // Blocks that change shape between phone and wider screens are rebuilt when the breakpoint is crossed.
-phone.addEventListener('change', () => render('services', 'stack'));
+phone.addEventListener('change', () => render('projects', 'services', 'stack'));
 
 // Rows that swipe sideways on a phone: keep the position dots under them in step.
 // Scroll events do not bubble, so they are caught on the way down.

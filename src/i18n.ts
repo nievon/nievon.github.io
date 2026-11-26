@@ -49,6 +49,7 @@ export const ui = {
   storyProblem: { ru: 'Задача', en: 'The problem' },
   storySolution: { ru: 'Что сделал', en: 'What I did' },
   storyOutcome: { ru: 'Что это дало', en: 'What it changed' },
+  ndaShort: { ru: 'Под NDA', en: 'Under NDA' },
   confidential: {
     ru: 'Проект под NDA, детали не раскрываю',
     en: 'Under NDA, details are not disclosed',

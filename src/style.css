@@ -2473,6 +2473,151 @@
   }
 }
 
+/* --- Phone case card ---------------------------------------------------------
+   Fixed anatomy, so every card in the row has the same parts at the same size:
+   media 16:10, a title block of fixed height, one status line, a headline
+   reserved for three lines and a result reserved for four. Text beyond that is
+   cut while the card is closed and shown in full once it is opened. */
+@media screen and (max-width: 767px) {
+  /* min-width 0: the one-line title must not push a card wider than its neighbours. */
+  .swipe.cases > .m-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: 20px;
+  }
+
+  .swipe.cases > .m-card > .case-photo,
+  .swipe.cases > .m-card > .case-banner {
+    flex: none;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    margin: 0;
+  }
+
+  .m-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 16px 12px 4px;
+  }
+
+  /* The project name may take two lines, the kind one; the block keeps the
+     same height either way, so the parts below stay aligned across cards. */
+  .swipe.cases .m-card .case-title {
+    align-items: flex-start;
+    height: 60px;
+    min-width: 0;
+  }
+
+  .swipe.cases .m-card .case-kind {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .swipe.cases .m-card .case-kind-sub {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .m-card .case-title > p {
+    min-width: 0;
+  }
+
+  .m-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 20px;
+    margin-top: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .m-meta .status {
+    font-size: 13px;
+  }
+
+  .swipe.cases .m-card .case-hook {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+    height: 100px;
+    margin-top: 12px;
+    font-size: 19px;
+    line-height: 25px;
+  }
+
+  .swipe.cases .m-card .lead-outcome {
+    display: block;
+    flex: none;
+    margin-top: 16px;
+  }
+
+  .swipe.cases .m-card .lead-outcome > .story-part {
+    flex: none;
+  }
+
+  .swipe.cases .m-card .lead-outcome p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+    height: 96px;
+  }
+
+  .m-card > .m-body > .fold-toggle {
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  /* Opened: the reserved heights give way to the full text. */
+  .swipe.cases .m-card.is-open .case-hook,
+  .swipe.cases .m-card.is-open .lead-outcome p {
+    display: block;
+    height: auto;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .m-card .fold-inner > .story {
+    margin-top: 8px;
+  }
+
+  .m-card .case-foot {
+    margin-top: 12px;
+  }
+
+  .m-nda {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--muted);
+  }
+
+  .m-tech {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .swipe.cases:has(.m-card.is-open) {
+    align-items: flex-start;
+  }
+}
+
 /* The current tab carries a short bar as well as colour. */
 .tab-link {
   position: relative;

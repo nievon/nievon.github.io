@@ -2,7 +2,7 @@ import { projects } from '../data/projects';
 import { stack } from '../data/stack';
 import { esc, rich, t, ui } from '../i18n';
 import { icon } from '../icons';
-import { state } from '../state';
+import { phone, state } from '../state';
 import type { Project } from '../types';
 
 const techName = new Map(stack.flatMap((g) => g.items).map((i) => [i.id, i.name]));
@@ -102,7 +102,7 @@ function title(p: Project, withKind = true): string {
   return `
     <div class="case-title">
       <span class="case-icon" aria-hidden="true">${icon(p.icon, 20)}</span>
-      <p class="case-kind">${esc(t(p.title))}${withKind ? `<span class="case-kind-sub">${esc(t(p.kind))}</span>` : ''}</p>
+      <div class="min-w-0"><p class="case-kind">${esc(t(p.title))}</p>${withKind ? `<p class="case-kind-sub">${esc(t(p.kind))}</p>` : ''}</div>
     </div>`;
 }
 
@@ -200,6 +200,50 @@ function compactCase(p: Project, index: number): string {
   </article>`;
 }
 
+/**
+ * Phone card. Every case uses the same anatomy, so the cards in the swipe row
+ * line up part for part: media of one size, a one-line title, one status line,
+ * a headline of up to three lines and a result of up to four. Everything else
+ * (the problem, the work, links, technical details) opens under "Show the case".
+ */
+function phoneCard(p: Project): string {
+  const open = !!state.unfolded[p.id];
+  const media = p.photo
+    ? photo(p)
+    : `<div class="case-banner" aria-hidden="true">${icon(p.icon, 48, 1.25)}</div>`;
+  const meta = [status(p), p.confidential ? `<span class="status">${icon('lock')}${esc(t(ui.ndaShort))}</span>` : '']
+    .filter(Boolean)
+    .join('');
+  const linkRow = links(p);
+  return `
+  <article id="project-${p.id}" class="case m-card${open ? ' is-open' : ''}" ${hl(p)} data-reveal="case">
+    ${media}
+    <div class="m-body">
+      ${title(p)}
+      <div class="m-meta">${meta}</div>
+      <h3 class="case-hook">${esc(t(p.hook))}</h3>
+      <div class="story lead-outcome">
+        ${part(t(ui.storyOutcome), t(p.story.outcome), true)}
+      </div>
+      <button type="button" class="fold-toggle" data-action="fold" data-project="${p.id}" data-key="fold:${p.id}" aria-expanded="${open}" aria-controls="fold-${p.id}">
+        <span class="when-closed">${esc(t(ui.foldOpen))}</span><span class="when-open">${esc(t(ui.foldClose))}</span>${icon('chevronDown')}
+      </button>
+      <div id="fold-${p.id}" class="fold${open ? ' is-open' : ''}"><div class="fold-inner">
+        <div class="story">
+          ${part(t(ui.storyProblem), t(p.story.problem))}
+          ${part(t(ui.storySolution), t(p.story.solution))}
+        </div>
+        ${linkRow ? `<div class="case-foot">${linkRow}</div>` : ''}
+        ${p.confidential ? `<p class="m-nda">${icon('lock')}${esc(t(ui.confidential))}</p>` : ''}
+        <div class="m-tech">
+          <p class="label">${esc(t(ui.viewTech))}</p>
+          <div class="mt-2">${tech(p)}</div>
+        </div>
+      </div></div>
+    </div>
+  </article>`;
+}
+
 /** Position dots for a row that swipes sideways on a phone. */
 export function dots(count: number): string {
   return `<div class="swipe-dots md:hidden print:hidden" aria-hidden="true">${Array.from({ length: count }, (_, i) => `<span${i === 0 ? ' class="is-on"' : ''}></span>`).join('')}</div>`;
@@ -215,9 +259,11 @@ export function projectsSection(): string {
     <h2 class="section-title">${esc(t(ui.projectsTitle))}</h2>
     <p class="section-lead print:hidden">${esc(t(ui.projectsLead))}</p>
     <div class="cases swipe mt-8">
-      ${withPhoto.map(photoCase).join('')}
-      ${wide.map(wideCase).join('')}
-      ${compact.map(compactCase).join('')}
+      ${
+        phone.matches
+          ? [...withPhoto, ...wide, ...compact].map(phoneCard).join('')
+          : `${withPhoto.map(photoCase).join('')}${wide.map(wideCase).join('')}${compact.map(compactCase).join('')}`
+      }
     </div>
     ${dots(projects.length)}
   </div>`;
