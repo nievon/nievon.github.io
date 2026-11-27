@@ -243,7 +243,9 @@ const all: Project[] = [
     },
     photo: { alt: { ru: 'Главная страница Chatvix AI', en: 'Chatvix AI landing page' } },
     status: { tone: 'active', label: { ru: 'В развитии', en: 'In development' } },
-    links: [],
+    links: [
+      { kind: 'site', label: { ru: 'chatvix.live', en: 'chatvix.live' }, url: 'https://chatvix.live' },
+    ],
     hook: {
       ru: 'Клиентов записывают на визит круглосуточно, прямо в мессенджере',
       en: 'Customers get booked for a visit around the clock, right in their messenger',
